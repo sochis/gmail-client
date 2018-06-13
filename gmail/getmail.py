@@ -5,8 +5,15 @@ import sys
 
 class GetMailContent():
 
-    def get_titles(self):
-        return self.__get_mail_headers('Subject')
+    def get_id_and_titles(self):
+        values = []
+        messages = self.__get_mail_list('is:read OR is:unread')['messages']
+        for message in messages:
+            headers = self.__get_mail_content(message['id'])['payload']['headers']
+            for header in headers:
+                if header['name'] == 'Subject':
+                    values.append(message['id'] + ' : ' + header['value'])
+        return values
 
     def get_all_attribute(self, query):
         mail = []

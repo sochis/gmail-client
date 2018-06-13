@@ -42,6 +42,3 @@ class Credential():
 
         gmail_service = build('gmail', 'v1', http=http)
         return gmail_service
-
-    if __name__ == '__main__' :
-        pass_credential(1,"full")
