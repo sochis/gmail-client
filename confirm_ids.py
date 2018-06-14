@@ -1,17 +1,17 @@
-from gmail.draft import Draft
-from gmail.getmail import GetMailContent
+from gmail.draft import DraftOperation
+from gmail.mail import MailOperaton
 import sys
 
 
 class Confirm():
 
     def show_draft_ids(self):
-        values = Draft().get_ids()
+        values = DraftOperation().get_ids()
         for value in values:
             print(value)
 
     def show_mail_id_and_titles(self):
-        values = GetMailContent().get_id_and_titles()
+        values = MailOperaton().get_id_and_titles()
         for value in values:
             print(value)
 

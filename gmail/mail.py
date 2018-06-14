@@ -1,9 +1,11 @@
 from auth.authorization import Credential
+from gmail.draft import DraftOperation
+from googleapiclient.errors import HttpError
 import base64
 import sys
 
 
-class GetMailContent():
+class MailOperaton():
 
     def get_id_and_titles(self):
         values = []
@@ -27,6 +29,18 @@ class GetMailContent():
             values = self.__get_mail_all_attribute(content)
             mail.append(values)
         return mail
+
+    def send_mail(self, sender, receiver, subject, text):
+        message_body = DraftOperation().create_message(sender, receiver, subject, text)
+        try:
+            self.service.users().messages().send(userId='me', body=message_body).execute()
+        except HttpError:
+            print("Mailing address format is invalid. Mail won't be sent.")
+            sys.exit()
+
+    def delete_mail(self, msg_id):
+        self.service.users().messages().delete(userId='me', id=msg_id).execute()
+        print('Message with id: %s deleted successfully.' % msg_id)
 
     def __get_mail_list(self, query):
         return self.service.users().messages().list(userId='me', q=query).execute()
@@ -72,4 +86,4 @@ class GetMailContent():
         return mail
 
     def __init__(self):
-        self.service = Credential().readonly_credential()
+        self.service = Credential().full_credential()

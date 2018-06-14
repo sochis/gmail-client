@@ -1,4 +1,4 @@
-from gmail.getmail import GetMailContent
+from gmail.mail import MailOperaton
 
 
 class Execute():
@@ -13,7 +13,7 @@ class Execute():
             print('------------------------------------------------------------------------------------')
 
     def __init__(self):
-        self.getmail = GetMailContent()
+        self.getmail = MailOperaton()
 
 
 if __name__ == '__main__':

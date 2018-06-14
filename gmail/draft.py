@@ -7,9 +7,9 @@ from email.mime.base import MIMEBase
 import mimetypes
 import base64
 import os
-from gmail.getmail import GetMailContent
 
-class Draft():
+
+class DraftOperation():
 
     def create_draft(self, message_body):
         message = {'message': message_body}
@@ -57,15 +57,20 @@ class Draft():
             file.close()
 
         msg.add_header('Content-Disposition', 'attachment', filename=filename)
-        message.attach(msg)
-        print(message)
-        message_body = base64.urlsafe_b64decode(message.as_bytes()).decode()
+        message_body = base64.urlsafe_b64encode(message.as_bytes()).decode()
 
         return {'raw': message_body}
 
     def modify_draft(self, draft_id, sender, receiver, subject, text):
         message = self.create_message(sender, receiver, subject, text)
         self.service.users().drafts().update(userId='me', id=draft_id, body=message).execute()
+
+    def send_draft(self, draft_id):
+        self.service.users().drafts().send(userId='me', id=draft_id).execute()
+
+    def delete_draft(self, draft_id):
+        self.service.users().drafts().delete(userId='me', id=draft_id).execute()
+        print('Draft with id: %s deleted successfully.' % draft_id)
 
     def get_ids(self):
         values = []
